@@ -40,4 +40,8 @@ public class ProdductService {
     public void deleteProduct(int id) {
          productRepo.deleteById(id);
     }
+
+    public List<Product> searchProducts(String Keyword) {
+         return productRepo.searchProducts(Keyword);
+    }
 }
