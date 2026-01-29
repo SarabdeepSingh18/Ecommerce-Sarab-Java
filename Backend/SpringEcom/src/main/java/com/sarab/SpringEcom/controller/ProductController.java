@@ -42,16 +42,41 @@ public class ProductController {
     }
 
     @PostMapping("/product")
-    public ResponseEntity<?> addProduct(@RequestPart Product product, @RequestPart MultipartFile imageFile){
+    public ResponseEntity<?> addProduct(@RequestPart Product product, @RequestPart MultipartFile imageFile) {
+        // This API handles a multipart/form-data request.
+// It receives:
+// 1) A Product object as JSON (@RequestPart Product product)
+// 2) An image file upload (@RequestPart MultipartFile imageFile)
+// Used when we need to send both data + file in a single request.
+
         Product savedProduct = null;
         try {
-            savedProduct = productService.addProduct(product,imageFile);
-            return new ResponseEntity<>(savedProduct,HttpStatus.CREATED);
+            savedProduct = productService. addorUpdateProduct(product, imageFile);
+            return new ResponseEntity<>(savedProduct, HttpStatus.CREATED);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+    @PutMapping("/product/{id}")
+    public ResponseEntity<String> updateProduct(@RequestPart Product product, @RequestPart MultipartFile imageFile ){
+        Product updatedProduct = null;
+        try{
+            updatedProduct = productService. addorUpdateProduct(product,imageFile);
+            return new ResponseEntity<>("Updated",HttpStatus.OK);
+        }
+        catch (IOException e){
+           throw new RuntimeException(e);
+        }
+    }
 
-
+    @DeleteMapping("/product/{id}")
+    public ResponseEntity<String> deleteProduct(@PathVariable int id) {
+        Product product = productService.getProductById(id);
+        if (product != null) {
+            productService.deleteProduct(id);
+            return new ResponseEntity<>("Deleted", HttpStatus.OK);
+        } else
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
 
