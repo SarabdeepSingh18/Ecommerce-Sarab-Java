@@ -29,12 +29,16 @@ public class ProdductService {
     }
 
     public Product addorUpdateProduct(Product product, MultipartFile imageFile) throws IOException {
-         product.setImageName(imageFile.getOriginalFilename());
-         product.setImageType(imageFile.getContentType());
-         product.setImageData(imageFile.getBytes());
-         return productRepo.save(product);
 
+        if (imageFile != null && !imageFile.isEmpty()) {
+            product.setImageName(imageFile.getOriginalFilename());
+            product.setImageType(imageFile.getContentType());
+            product.setImageData(imageFile.getBytes());
+        }
+
+        return productRepo.save(product);
     }
+
 
 
     public void deleteProduct(int id) {

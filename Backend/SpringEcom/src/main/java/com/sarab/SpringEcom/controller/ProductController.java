@@ -13,7 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api")
-@CrossOrigin //allow frontend to connect with backend request from other port no
+@CrossOrigin(origins = "*") //allow frontend to connect with backend request from other port no
 public class ProductController {
 
     @Autowired
