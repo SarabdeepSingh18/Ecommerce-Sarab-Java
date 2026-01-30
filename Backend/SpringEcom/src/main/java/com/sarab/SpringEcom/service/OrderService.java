@@ -10,6 +10,7 @@ import com.sarab.SpringEcom.model.dto.OrderRequest;
 import com.sarab.SpringEcom.model.dto.OrderResponse;
 import com.sarab.SpringEcom.repo.OrderRepo;
 import com.sarab.SpringEcom.repo.ProductRepo;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -81,7 +82,37 @@ public class OrderService {
         return orderResponse;
     }
 
+    @Transactional
     public List<OrderResponse> getAllOrderResponses() {
-        return null;
+
+        List<Order> orders = orderRepo.findAll();
+        List<OrderResponse> orderResponses = new ArrayList<>();
+
+        for (Order order : orders) {
+
+
+            List<OrderItemResponse> itemResponses = new ArrayList<>();
+
+            for(OrderItem item : order.getOrderItems()) {
+                OrderItemResponse orderItemResponse = new OrderItemResponse(
+                        item.getProduct().getName(),
+                        item.getQuantity(),
+                        item.getTotalPrice()
+                );
+                itemResponses.add(orderItemResponse);
+
+            }
+            OrderResponse orderResponse = new OrderResponse(
+                    order.getOrderId(),
+                    order.getCustomerName(),
+                    order.getEmail(),
+                    order.getStatus(),
+                    order.getOrderDate(),
+                    itemResponses
+            );
+            orderResponses.add(orderResponse);
+        }
+
+        return orderResponses;
     }
 }
