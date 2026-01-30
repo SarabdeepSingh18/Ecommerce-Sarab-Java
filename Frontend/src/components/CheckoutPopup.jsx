@@ -63,6 +63,7 @@ const CheckoutPopup = ({ show, handleClose, cartItems, totalPrice }) => {
     }
   };
   const convertBase64ToDataURL = (base64String, mimeType = 'image/jpeg') => {
+    const unplugged = '/fallback-image.jpg';
     if (!base64String) return unplugged; // Return fallback image if no data
 
     // If it's already a data URL, return as is
